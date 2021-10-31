@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { useImmerReducer } from 'use-immer';
-import { login } from "~/main/utils/Login"
+import { login } from '~/main/utils/Login';
 
 function loginReducer(draft, action) {
     switch (action.type) {
@@ -42,12 +42,10 @@ const initialState = {
     password: '',
     isLoading: false,
     error: '',
-    isLoggedIn: false,
+    isLoggedIn: false
 };
 
-
 export default function LoginExample() {
-
     const [state, dispatch] = useImmerReducer(loginReducer, initialState);
     const { username, password, isLoading, error, isLoggedIn } = state;
     const onSubmit = async (e) => {
@@ -63,50 +61,54 @@ export default function LoginExample() {
         }
     };
     return (
-        <div className='App'>
-            <div className='login-container'>
+        <div className="App">
+            <div className="login-container">
                 {isLoggedIn ? (
                     <>
                         <h1>Welcome {username}!</h1>
                         <button onClick={() => dispatch({ type: 'logOut' })}>
                             Log Out
-            </button>
+                        </button>
                     </>
                 ) : (
-                        <form className='form' onSubmit={onSubmit}>
-                            {error && <p className='error'>{error}</p>}
-                            <p>Please Login!</p>
-                            <input
-                                type='text'
-                                placeholder='username'
-                                value={username}
-                                onChange={(e) =>
-                                    dispatch({
-                                        type: 'field',
-                                        fieldName: 'username',
-                                        payload: e.currentTarget.value,
-                                    })
-                                }
-                            />
-                            <input
-                                type='password'
-                                placeholder='password'
-                                autoComplete='new-password'
-                                value={password}
-                                onChange={(e) =>
-                                    dispatch({
-                                        type: 'field',
-                                        fieldName: 'password',
-                                        payload: e.currentTarget.value,
-                                    })
-                                }
-                            />
-                            <button className='submit' type='submit' disabled={isLoading}>
-                                {isLoading ? 'Logging in...' : 'Log In'}
-                            </button>
-                        </form>
-                    )}
+                    <form className="form" onSubmit={onSubmit}>
+                        {error && <p className="error">{error}</p>}
+                        <p>Please Login!</p>
+                        <input
+                            type="text"
+                            placeholder="username"
+                            value={username}
+                            onChange={(e) =>
+                                dispatch({
+                                    type: 'field',
+                                    fieldName: 'username',
+                                    payload: e.currentTarget.value
+                                })
+                            }
+                        />
+                        <input
+                            type="password"
+                            placeholder="password"
+                            autoComplete="new-password"
+                            value={password}
+                            onChange={(e) =>
+                                dispatch({
+                                    type: 'field',
+                                    fieldName: 'password',
+                                    payload: e.currentTarget.value
+                                })
+                            }
+                        />
+                        <button
+                            className="submit"
+                            type="submit"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Logging in...' : 'Log In'}
+                        </button>
+                    </form>
+                )}
             </div>
         </div>
-    )
+    );
 }
