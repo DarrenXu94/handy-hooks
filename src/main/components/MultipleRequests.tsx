@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { useAsync } from "react-use";
-import { useThrottleRequests } from "../hooks/useThrottleRequests";
+import React, { useCallback, useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { useThrottleRequests } from '../hooks/useThrottleRequests';
 
 type GitHubUser = { name: string; blog?: string };
 
@@ -10,43 +10,47 @@ function timeout(ms: number) {
 
 function useContributors(contributorsUrlToLoad: string) {
     const { throttle, updateThrottle } = useThrottleRequests<GitHubUser>();
-    const [progressMessage, setProgressMessage] = useState("");
+    const [progressMessage, setProgressMessage] = useState('');
 
     useAsync(async () => {
         if (!contributorsUrlToLoad) return;
 
-        setProgressMessage("loading contributors");
+        setProgressMessage('loading contributors');
 
         // load contributors from GitHub
         const contributorsResponse = await fetch(contributorsUrlToLoad);
-        const contributors: { url: string }[] = await contributorsResponse.json();
+        const contributors: {
+            url: string;
+        }[] = await contributorsResponse.json();
 
         setProgressMessage(`loading ${contributors.length} contributors...`);
 
         // For each entry in result, retrieve the given user from GitHub
-        const requestsToMake = contributors.map(({ url }, index) => async () => {
-            try {
-                setProgressMessage(
-                    `loading ${index} / ${contributors.length}: ${url}...`
-                );
+        const requestsToMake = contributors.map(
+            ({ url }, index) => async () => {
+                try {
+                    setProgressMessage(
+                        `loading ${index} / ${contributors.length}: ${url}...`
+                    );
 
-                const response = await fetch(url);
-                const json: GitHubUser = await response.json();
+                    const response = await fetch(url);
+                    const json: GitHubUser = await response.json();
 
-                // wait for 1 second before completing the request
-                // - makes for better demos
-                await timeout(1000);
+                    // wait for 1 second before completing the request
+                    // - makes for better demos
+                    await timeout(1000);
 
-                updateThrottle.requestSucceededWithData(json);
-            } catch (error) {
-                console.error(`failed to load ${url}`, error);
-                updateThrottle.requestFailedWithError(error);
+                    updateThrottle.requestSucceededWithData(json);
+                } catch (error) {
+                    console.error(`failed to load ${url}`, error);
+                    updateThrottle.requestFailedWithError(error);
+                }
             }
-        });
+        );
 
         await updateThrottle.queueRequests(requestsToMake);
 
-        setProgressMessage("");
+        setProgressMessage('');
     }, [contributorsUrlToLoad, updateThrottle, setProgressMessage]);
 
     return { throttle, progressMessage };
@@ -56,22 +60,25 @@ function App() {
     // The owner and repo to query; we're going to default
     // to using DefinitelyTyped as an example repo as it
     // is one of the most contributed to repos on GitHub
-    const [owner, setOwner] = useState("DefinitelyTyped");
-    const [repo, setRepo] = useState("DefinitelyTyped");
+    const [owner, setOwner] = useState('DefinitelyTyped');
+    const [repo, setRepo] = useState('DefinitelyTyped');
     const handleOwnerChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) =>
             setOwner(event.target.value),
         [setOwner]
     );
     const handleRepoChange = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => setRepo(event.target.value),
+        (event: React.ChangeEvent<HTMLInputElement>) =>
+            setRepo(event.target.value),
         [setRepo]
     );
 
     const contributorsUrl = `https://api.github.com/repos/${owner}/${repo}/contributors`;
 
-    const [contributorsUrlToLoad, setUrlToLoad] = useState("");
-    const { progressMessage, throttle } = useContributors(contributorsUrlToLoad);
+    const [contributorsUrlToLoad, setUrlToLoad] = useState('');
+    const { progressMessage, throttle } = useContributors(
+        contributorsUrlToLoad
+    );
 
     const bloggers = useMemo(
         () => throttle.values.filter((contributor) => contributor.blog),
@@ -84,7 +91,7 @@ function App() {
                 <h1>Blogging devs</h1>
 
                 <p>
-                    Show me the{" "}
+                    Show me the{' '}
                     <a
                         className="App-link"
                         href={contributorsUrl}
@@ -92,9 +99,9 @@ function App() {
                         rel="noopener noreferrer"
                     >
                         contributors for {owner}/{repo}
-                    </a>{" "}
-          who have blogs.
-        </p>
+                    </a>{' '}
+                    who have blogs.
+                </p>
 
                 <div className="App-labelinput">
                     <label htmlFor="owner">GitHub Owner</label>
@@ -118,7 +125,7 @@ function App() {
                     onClick={(e) => setUrlToLoad(contributorsUrl)}
                 >
                     Load bloggers from GitHub
-        </button>
+                </button>
 
                 {progressMessage && (
                     <div className="App-progress">{progressMessage}</div>

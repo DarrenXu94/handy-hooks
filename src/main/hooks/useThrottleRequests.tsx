@@ -1,5 +1,5 @@
-import { useMemo, useReducer } from "react";
-import { AsyncState } from "react-use/lib/useAsync";
+import { useMemo, useReducer } from 'react';
+import { AsyncState } from 'react-use/lib/useAsync';
 
 // Source https://blog.logrocket.com/throttling-data-requests-with-react-hooks/
 
@@ -63,7 +63,7 @@ function createThrottledProgress<TData>(
         percentageLoaded: 0,
         loading: false,
         errors: [],
-        values: [],
+        values: []
     };
 }
 
@@ -86,8 +86,10 @@ function updateThrottledProgress<TData>(
         currentProgress.totalRequests === 0
             ? 0
             : Math.round(
-                ((errors.length + values.length) / currentProgress.totalRequests) * 100
-            );
+                  ((errors.length + values.length) /
+                      currentProgress.totalRequests) *
+                      100
+              );
 
     const loading =
         currentProgress.totalRequests === 0
@@ -99,23 +101,23 @@ function updateThrottledProgress<TData>(
         loading,
         percentageLoaded,
         errors,
-        values,
+        values
     };
 }
 
 type ThrottleActions<TValue> =
     | {
-        type: "initialise";
-        totalRequests: number;
-    }
+          type: 'initialise';
+          totalRequests: number;
+      }
     | {
-        type: "requestSuccess";
-        value: TValue;
-    }
+          type: 'requestSuccess';
+          value: TValue;
+      }
     | {
-        type: "requestFailed";
-        error: Error;
-    };
+          type: 'requestFailed';
+          error: Error;
+      };
 
 /**
  * Create a ThrottleRequests and an updater
@@ -126,19 +128,19 @@ export function useThrottleRequests<TValue>() {
         action: ThrottleActions<TValue>
     ): ThrottledProgress<TValue> {
         switch (action.type) {
-            case "initialise":
+            case 'initialise':
                 return createThrottledProgress(action.totalRequests);
 
-            case "requestSuccess":
+            case 'requestSuccess':
                 return updateThrottledProgress(throttledProgressAndState, {
                     loading: false,
-                    value: action.value,
+                    value: action.value
                 });
 
-            case "requestFailed":
+            case 'requestFailed':
                 return updateThrottledProgress(throttledProgressAndState, {
                     loading: false,
-                    error: action.error,
+                    error: action.error
                 });
         }
     }
@@ -155,8 +157,8 @@ export function useThrottleRequests<TValue>() {
          */
         function requestSucceededWithData(value: TValue) {
             return dispatch({
-                type: "requestSuccess",
-                value,
+                type: 'requestSuccess',
+                value
             });
         }
 
@@ -166,8 +168,8 @@ export function useThrottleRequests<TValue>() {
          */
         function requestFailedWithError(error: Error) {
             return dispatch({
-                type: "requestFailed",
-                error,
+                type: 'requestFailed',
+                error
             });
         }
 
@@ -184,8 +186,8 @@ export function useThrottleRequests<TValue>() {
             maxParallelRequests = 6
         ) {
             dispatch({
-                type: "initialise",
-                totalRequests: requestsToMake.length,
+                type: 'initialise',
+                totalRequests: requestsToMake.length
             });
 
             return throttleRequests(requestsToMake, maxParallelRequests);
@@ -194,12 +196,12 @@ export function useThrottleRequests<TValue>() {
         return {
             queueRequests,
             requestSucceededWithData,
-            requestFailedWithError,
+            requestFailedWithError
         };
     }, [dispatch]);
 
     return {
         throttle,
-        updateThrottle,
+        updateThrottle
     };
 }

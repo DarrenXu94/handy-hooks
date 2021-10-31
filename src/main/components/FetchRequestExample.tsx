@@ -1,23 +1,23 @@
-import React from 'react'
+import React from 'react';
 import useDataFetcher from '../hooks/useDataFetcher';
 
-const BASE_URL = "https://jsonplaceholder.typicode.com/posts";
+const BASE_URL = 'https://jsonplaceholder.typicode.com/posts';
 
 export default function FetchRequestExample() {
-    const { posts, isLoading, error } = useDataFetcher(BASE_URL)
+    const { posts, isLoading, error } = useDataFetcher(BASE_URL);
 
     if (error) {
-        return <p style={{ color: 'red' }}>{error.message}</p>
+        return <p style={{ color: 'red' }}>{error.message}</p>;
     }
 
     if (isLoading) {
-        return <p>Loading posts...</p>
+        return <p>Loading posts...</p>;
     }
 
     return (
         <div>
             <h1>App</h1>
-            {posts.map(post => (
+            {posts.map((post) => (
                 <>
                     <h3>{post.title}</h3>
                     <p>{post.body}</p>

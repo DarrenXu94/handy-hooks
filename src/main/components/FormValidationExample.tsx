@@ -1,10 +1,10 @@
-import React from 'react'
-import useFormValidation from "../hooks/useFormValidation";
-import validateAuth from "../utils/ValidateAuth";
+import React from 'react';
+import useFormValidation from '../hooks/useFormValidation';
+import validateAuth from '../utils/ValidateAuth';
 
 const INITIAL_STATE = {
-    email: "",
-    password: ""
+    email: '',
+    password: ''
 };
 
 export default function FormValidationExample() {
@@ -26,7 +26,7 @@ export default function FormValidationExample() {
                     onBlur={handleBlur}
                     name="email"
                     value={values.email}
-                    className={errors.email && "error-input"}
+                    className={errors.email && 'error-input'}
                     autoComplete="off"
                     placeholder="Your email address"
                 />
@@ -35,12 +35,14 @@ export default function FormValidationExample() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.password}
-                    className={errors.password && "error-input"}
+                    className={errors.password && 'error-input'}
                     name="password"
                     type="password"
                     placeholder="Choose a safe password"
                 />
-                {errors.password && <p className="error-text">{errors.password}</p>}
+                {errors.password && (
+                    <p className="error-text">{errors.password}</p>
+                )}
                 <div>
                     <button disabled={isSubmitting} type="submit">
                         Submit
@@ -48,5 +50,5 @@ export default function FormValidationExample() {
                 </div>
             </form>
         </div>
-    )
+    );
 }
